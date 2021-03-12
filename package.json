@@ -1,0 +1,19 @@
+{
+  "name": "fetch-activity",
+  "version": "1.0.0",
+  "description": "fetches GitHub activity, providing an API for that activity and rendering it prettily in Markdown",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard"
+  },
+  "keywords": [],
+  "author": "Tierney Cyren <hello@bnb.im>",
+  "license": "MIT",
+  "devDependencies": {
+    "standard": "^16.0.3"
+  },
+  "dependencies": {
+    "@octokit/rest": "^18.3.2",
+    "dotenv": "^8.2.0"
+  }
+}
