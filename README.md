@@ -1,6 +1,6 @@
 # fetch-activity
 
-## Usage:
+## Usage
 
 Currently WIP, so the following instructions assume you're writing a file in the root of the repo (rather than installing from npm):
 
