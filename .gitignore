@@ -118,6 +118,7 @@ dist
 # local
 
 local.js
+/data
 team.js
 team.md
 /team
