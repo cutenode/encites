@@ -1,6 +1,6 @@
 {
-  "name": "fetch-activity",
-  "version": "1.0.1",
+  "name": "encites",
+  "version": "1.0.0",
   "description": "fetches GitHub activity, providing an API for that activity and rendering it prettily in Markdown",
   "main": "index.js",
   "scripts": {
@@ -16,5 +16,16 @@
     "@octokit/rest": "^18.3.2",
     "dotenv": "^8.2.0",
     "luxon": "^1.26.0"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cutenode/fetch-activity.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cutenode/fetch-activity/issues"
+  },
+  "homepage": "https://github.com/cutenode/fetch-activity#readme"
 }
