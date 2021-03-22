@@ -1,7 +1,13 @@
+const dedupeLocalData = require('./lib/dedupeLocalData')
 const getFilteredPublicUserData = require('./lib/getFilteredPublicUserData')
-const writeMarkdownFromData = require('./lib/writeMarkdownFromData')
+const getMarkdownFromData = require('./lib/getMarkdownFromData')
 const writeInstanceOfData = require('./lib/writeInstanceOfData')
+const getLocalEventsFrom = require('./lib/getLocalEventsFrom')
 
-module.exports.getFilteredPublicUserData = getFilteredPublicUserData
-module.exports.writeMarkdownFromData = writeMarkdownFromData
-module.exports.writeInstanceOfData = writeInstanceOfData
+module.exports = {
+  dedupeLocalData,
+  getFilteredPublicUserData,
+  getMarkdownFromData,
+  writeInstanceOfData,
+  getLocalEventsFrom
+}
