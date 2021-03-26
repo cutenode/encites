@@ -3,11 +3,15 @@ const getAndFilterPublicGitHubEvents = require('./lib/getAndFilterPublicGitHubEv
 const getEventsFrom = require('./lib/getEventsFrom')
 const getMarkdownFromEvents = require('./lib/getMarkdownFromEvents')
 const writeEventsFile = require('./lib/writeEventsFile')
+const writeMarkdownFile = require('./lib/writeMarkdownFile')
+const writeMegafile = require('./lib/writeMegafile')
 
 module.exports = {
   dedupeLocalEventsFilesInDirectory,
   getAndFilterPublicGitHubEvents,
   getEventsFrom,
   getMarkdownFromEvents,
-  writeEventsFile
+  writeEventsFile,
+  writeMarkdownFile,
+  writeMegafile
 }

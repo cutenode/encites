@@ -21,27 +21,24 @@ Some additional terms and context around them:
 - Events: Events are the primordial that Encites gets from GitHub. Encites manipulates the Event objects it gets from GitHub through `getAndFilterPublicGitHubEvents` to be more compact, only surfacing information that are useful for accomplishing the goals of Encites.
 - Events Array: An array that contains individual Events.
 - Events File: A file that contains an Events Array. Generally, written by one of the helper methods.
+- Data Directory: The directory where your JSON output files go.
 
 ### Methods
 
-#### dedupeLocalEventsFilesInDirectory(dataDirectory, megafileName)
+#### dedupeLocalEventsFilesInDirectory(dataDirectory)
 
 A utility in the pursuit of building megafiles. It will retrun a deduped array of all entires from entries files in the passed directory.
 
-* `dataDirectory` (string, required): path to your data directory to step through for events files (Encites presumes that _all_ files in that data directory are events files, excluding the single file passed as `megafileName`).
-* `megafileName` (string, optional): name of your megafile, including file extension, to be ignored.
+* `dataDirectory` (string, required): path to your data directory to step through for events files (Encites presumes that _all_ files in that data directory are events files).
 
 ```js
 const { dedupeLocalEventsFilesInDirectory } = require('encites')
 
 const directory = './data/`
-const megafileName = 'megafile.json'
 
 const dedupedData = dedupeLocalEventsFilesInDirectory(`${directory}`)
-const dedupedDataExcludingMegafile = dedupeLocalEventsFilesInDirectory(`${directory}${megafileName}`)
 
 console.log(dedupedData) // get all data, deduped, from your data directory
-
 ```
 #### getFilteredPublicUserData(githubUsernames)
 
@@ -107,7 +104,7 @@ const dateFilteredEvents = await getLocalEventsFrom.period(`${dataPath}${megafil
 
 Takes an Events Array, spits out pretty markdown.
 
-* `events` (Array, required): An array of Events.
+* `events` (array, required): An array of Events.
 
 ```js
 const { getMarkdownFromEvents, getFilteredPublicUserData } = require('encites')
@@ -122,12 +119,12 @@ const dataFromGitHub = getFilteredPublicUserData(arrayOfGitHubUsers)
 const markdown = await getMarkdownFromEvents(dataFromGitHub)
 ```
 
-#### writeEventsFile(dataDirectory, eventsToWrite, options)
+#### writeEventsFile(dataDirectory, events, options)
 
 Writes an Events File to the passed Data Directory with the passed Events Array. By default, the filename is the current date in `yyyy-mm-dd` format, but you can overwrite that with options. Doing so is useful for writing megafiles.
 
 * `dataDirectory` (string, required): the path to your data directory, where an Events File will be written to.
-* `eventsToWrite` (Array, required): Pass in an Event Array to be written to the provided path.
+* `events` (array, required): Pass in an Event Array to be written to the provided path.
 * `options` (object, optional):
   * `filename` (string, optional): The name of the file. Useful for writing megafiles.
 
@@ -138,10 +135,51 @@ const { getAndFilterPublicGitHubEvents, writeEventsFile } = require('encites')
   const dataPath = './data/'
 
 // fetches public data from  the GitHub API
-const data = await getAndFilterPublicGitHubEvents(users)
+const events = await getAndFilterPublicGitHubEvents(users)
 
 // write single instance of data
-writeEventsFile(`${dataPath}`, data)
+writeEventsFile(`${dataPath}`, events)
+```
+
+#### writeMarkdownFile(markdownPath, markdownFileName, events)
+
+A relatively straightforward wrapper of [`getMarkdownFromEvents()`](#getmarkdownfromeventsevents) to write events out as a pretty Markdown file to a provided path with a provided filename.
+
+- `markdownPath` (string, required): The _full path_ to which you want the markdown file to be written. Does not include filename.
+- `markdownFileName` (string, required): The filename, including extension, that you want your resulting markdown to be written as.
+- `events` (array, required): An array of Events that you'd like to be parsed out into Markdown.
+
+```js
+const { getAndFilterPublicGitHubEvents, writeMarkdownFile } = require('encites')
+
+// in this case, we're fine with our markdown file being in the root 
+const markdownPath = './'
+const markdownFilename = 'output.md'
+
+// fetches public data from  the GitHub API
+const events = await getAndFilterPublicGitHubEvents(users)
+
+// write single instance of data
+writeMarkdownFile(markdownPath, markdownFileName, events)
+```
+#### writemegafile(dataPath, megafileFileName)
+
+A tiny wrapper over [`writeEventsFile()`](#writeeventsfiledatadirectory-events-options) to simplify writing megafiles. Writes a megafile to the data directory.
+
+- `dataPath` (string, required): the path to your data directory. 
+- `megafileFileName` (string, required): the name of your megafile. `megafile.json` is a good choice.
+
+```js
+const { writeMegafile } = require('encites')
+
+// data directory that we write all our files to
+const dataPath = './data/'
+
+// name of the megafile. Can be whatever, I've just chosen megafile. Needs to be `.json`.
+const megafileName =  'megafile.json'
+
+// write our megafile to the data directory
+writeMegafile(dataPath, megafileName)
 ```
 
 ### Appendix A: Object Shapes
