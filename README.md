@@ -12,16 +12,27 @@ npm install encites
 
 There are a few things you'll need:
 
-- GitHub Personal Access Token: You'll need this if you plan to be using `getFilteredPublicUserData`, which is foundational for using Encites. Encites expects to consume this from a `ENCITES_GITHUB_PAT` environment variable, which can be set manually or via a `.env` file in your project, courtesy of our usage of [dotenv](https://www.npmjs.com/package/dotenv).
-- Data directory: You'll need a data directory. Regardless of what you name this directory, almost all operations of encites assume you have one. Encites will not create one for you.
+- Data directory: You'll need a data directory. Regardless of what you name this directory, almost all operations of encites assume you have one. Encites will try to create one for you if one doesn't already exist when you're running some commands, but does not gaurantee that it'll succeed.
 - Megafile name: Since GitHub only returns 30 days or 300 results (whichever is less), Encites provides some functionality that can help you build a cache of all events if you run it often enough (how often is often enough depends on how active any given user is). In the project, this is considered a `megafile` and can be thought of as a kind of cache. To use certain kinds of functionality, you'll need to choose a name for your megafile and keep it consistent. `megafile.json` is a good default.
 
 Some additional terms and context around them:
 
-- Events: Events are the primordial that Encites gets from GitHub. Encites manipulates the Event objects it gets from GitHub through `getAndFilterPublicGitHubEvents` to be more compact, only surfacing information that are useful for accomplishing the goals of Encites.
+- Events: Events are the primordial that Encites gets from GitHub. Encites manipulates the Event objects it gets from GitHub through `getPublicGitHubEvents`, and can use `filterPublicGitHubEvents` to be more compact, only surfacing information that are useful for accomplishing the goals of Encites.
 - Events Array: An array that contains individual Events.
 - Events File: A file that contains an Events Array. Generally, written by one of the helper methods.
 - Data Directory: The directory where your JSON output files go.
+
+### Environment Variables
+
+Encites uses [dotenv](https://www.npmjs.com/package/dotenv) to read environment variables from a `.env` file in your project. If you'd prefer not to use a `.env` file, you can define your environment variables in your operating system through normal methods.
+
+#### `ENCITES_GITHUB_PAT`
+
+This is expected to be assigned the value of a GitHub Personal Access Token (GitHub PAT, see [GitHub's docs](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) for details on how to create one). This is needed to ensure you don't get rate limited, which will almost certainly happen when using Encites without a PAT.
+
+#### `ENCITES_LOGGER`
+
+If this is assigned the value of `true`, you will get pretty log output from [pino](https://npm.im/pino). You can use [pino-pretty](http://npm.im/pino-pretty) to prettily view them in your terminal.
 
 ### Methods
 
@@ -36,23 +47,27 @@ const { dedupeLocalEventsFilesInDirectory } = require('encites')
 
 const directory = './data/`
 
-const dedupedData = dedupeLocalEventsFilesInDirectory(`${directory}`)
+// get all data, deduped, from your data directory
+const dedupedData = await dedupeLocalEventsFilesInDirectory(`${directory}`)
 
-console.log(dedupedData) // get all data, deduped, from your data directory
+console.log(dedupedData)
 ```
-#### getFilteredPublicUserData(githubUsernames)
+#### filterPublicGitHubEvents(events)
 
-Fetches data from the GitHub API. Only fetches public data, zero authenticated/private data is fetched.
+Parses data from the GitHub API, provided to the method via the `events` property, and returns a nice clean array of objects representing events with only relevant information.
 
-* `githubUsernames` (string, required): An Array of GitHub usernames for whom you want to consume public data.
+* `events` (array, required): an array of GitHub API response data.
 
 ```js
-const { getFilteredPublicUserData } = require('encites')
+const { filterPublicGitHubEvents, getPublicGitHubEvents } = require('encites')
 
 const arrayOfGitHubUsers = ['bnb']
 
-// make sure you've already set ENCITES_GITHUB_PAT
-getFilteredPublicUserData(arrayOfGitHubUsers)
+// get our GitHub data - make sure you've already set ENCITES_GITHUB_PAT
+const publicEvents = await getPublicGitHubEvents(arrayOfGitHubUsers)
+
+// filter our data into the shape the rest of the module expects
+const events = await filterPublicGitHubEvents(publicEvents)
 ```
 
 #### getEventsFrom
@@ -100,23 +115,47 @@ const dateToCheckUntil = '2021-03-28' // yyyy-mm-dd
 const dateFilteredEvents = await getLocalEventsFrom.period(`${dataPath}${megafileName}`, dateToCheckFrom, dateToCheckUntil)
 ```
 
-#### getMarkdownFromEvents(events)
+#### getMarkdownFromEvents(events, title)
 
 Takes an Events Array, spits out pretty markdown.
 
 * `events` (array, required): An array of Events.
+* `title` (string, required): A string to be used as the title of your Markdown document.
 
 ```js
-const { getMarkdownFromEvents, getFilteredPublicUserData } = require('encites')
+const { filterPublicGitHubEvents, getMarkdownFromEvents getPublicGitHubEvents } = require('encites')
 
 // the users we're getting data for
-const arrayOfGitHubUsers = ['bnb']
+const users = ['bnb']
 
-// make sure you've already set ENCITES_GITHUB_PAT
-const dataFromGitHub = getFilteredPublicUserData(arrayOfGitHubUsers)
+// fetch new data from GitHub - make sure you've already set ENCITES_GITHUB_PAT
+const publicEvents = await getPublicGitHubEvents(users)
+
+// structure our data in the shape we need
+const events = await filterPublicGitHubEvents(users)
 
 // get a markdown representation of our Events
-const markdown = await getMarkdownFromEvents(dataFromGitHub)
+const markdown = await getMarkdownFromEvents(events)
+``` 
+
+#### getPublicGitHubEvents(githubUsernames)
+
+Fetches data from the GitHub API. Only fetches public data, zero authenticated/private data is fetched. 
+
+You can either directly pass this along to something that consumes it, or you can write it to a file. Writing it to a file has the benefit of being able to be consumed again later if you'd like to rebuild your data or if there are new Event parsing capabilities added to the module once you're past 90 days or 300 events.
+
+* `githubUsernames` (string, required): An Array of GitHub usernames for whom you want to consume public data.
+
+```js
+const { filterPublicGitHubEvents, getPublicGitHubEvents } = require('encites')
+
+const arrayOfGitHubUsers = ['bnb']
+
+// get our GitHub data - make sure you've already set ENCITES_GITHUB_PAT
+const publicEvents = await getPublicGitHubEvents(arrayOfGitHubUsers)
+
+// filter our data into the shape the rest of the module expects
+const events = await filterPublicGitHubEvents(publicEvents)
 ```
 
 #### writeEventsFile(dataDirectory, events, options)
@@ -129,35 +168,47 @@ Writes an Events File to the passed Data Directory with the passed Events Array.
   * `filename` (string, optional): The name of the file. Useful for writing megafiles.
 
 ```js
-const { getAndFilterPublicGitHubEvents, writeEventsFile } = require('encites')
+const { filterPublicGitHubEvents, getPublicGitHubEvents, writeEventsFile } = require('encites')
 
 // path to write all our files to.
   const dataPath = './data/'
 
+// array of users we'd like data for
+const users = ['bnb']
+
+const publicEvents = await getPublicGitHubEvents(users)
+
 // fetches public data from  the GitHub API
-const events = await getAndFilterPublicGitHubEvents(users)
+const events = await filterPublicGitHubEvents(publicEvents)
 
 // write single instance of data
 writeEventsFile(`${dataPath}`, events)
 ```
 
-#### writeMarkdownFile(markdownPath, markdownFileName, events)
+#### writeMarkdownFile(markdownPath, markdownFileName, events, title)
 
 A relatively straightforward wrapper of [`getMarkdownFromEvents()`](#getmarkdownfromeventsevents) to write events out as a pretty Markdown file to a provided path with a provided filename.
 
 - `markdownPath` (string, required): The _full path_ to which you want the markdown file to be written. Does not include filename.
 - `markdownFileName` (string, required): The filename, including extension, that you want your resulting markdown to be written as.
 - `events` (array, required): An array of Events that you'd like to be parsed out into Markdown.
+- `title` (string, required): A string to be used as the title of your Markdown document.
 
 ```js
-const { getAndFilterPublicGitHubEvents, writeMarkdownFile } = require('encites')
+const { filterPublicGitHubEvents, getPublicGitHubEvents, writeMarkdownFile } = require('encites')
 
 // in this case, we're fine with our markdown file being in the root 
 const markdownPath = './'
 const markdownFilename = 'output.md'
 
+// the usernames we want public data for
+const users = ['bnb']
+
+// fetch the public data - make sure you've already set ENCITES_GITHUB_PAT
+const publicEvents = await getPublicGitHubEvents(users)
+
 // fetches public data from  the GitHub API
-const events = await getAndFilterPublicGitHubEvents(users)
+const events = await getAndFilterPublicGitHubEvents(publicEvents)
 
 // write single instance of data
 writeMarkdownFile(markdownPath, markdownFileName, events)
@@ -182,9 +233,9 @@ const megafileName =  'megafile.json'
 writeMegafile(dataPath, megafileName)
 ```
 
-### Appendix A: Object Shapes
+## Appendix A: Object Shapes
 
-#### Event Object
+### Event Object
 
 An event object has a relatively specific structure. This structure is based on which `type` of event the Event Object is representing. These structures are built out in `./lib/getAndFilterPublicGitHubEvents.js`. Here's a reference for each kind:
 
