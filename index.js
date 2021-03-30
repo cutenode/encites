@@ -1,11 +1,11 @@
-const dedupeLocalEventsFilesInDirectory = require('./lib/dedupeLocalEventsFilesInDirectory')
-const filterPublicGitHubEvents = require('./lib/filterPublicGitHubEvents')
-const getEventsFrom = require('./lib/getEventsFrom')
-const getMarkdownFromEvents = require('./lib/getMarkdownFromEvents')
-const getPublicGitHubEvents = require('./lib/getPublicGitHubEvents')
-const writeEventsFile = require('./lib/writeEventsFile')
-const writeMarkdownFile = require('./lib/writeMarkdownFile')
-const writeMegafile = require('./lib/writeMegafile')
+const dedupeLocalEventsFilesInDirectory = require('./lib/events/dedupeLocalEventsFilesInDirectory')
+const filterPublicGitHubEvents = require('./lib/events/filterPublicGitHubEvents')
+const getEventsFrom = require('./lib/events/getEventsFrom')
+const getMarkdownFromEvents = require('./lib/markdown/getMarkdownFromEvents')
+const getPublicGitHubEvents = require('./lib/events/getPublicGitHubEvents')
+const writeEventsFile = require('./lib/files/writeEventsFile')
+const writeMarkdownFile = require('./lib/markdown/writeMarkdownFile')
+const writeMegafile = require('./lib/files/writeMegafile')
 
 module.exports = {
   dedupeLocalEventsFilesInDirectory,
