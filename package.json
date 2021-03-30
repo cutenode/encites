@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "standard"
   },
-  "keywords": [],
+  "keywords": ["github", "insights", "api", "markdown"],
   "author": "Tierney Cyren <hello@bnb.im>",
   "license": "MIT",
   "devDependencies": {
@@ -23,10 +23,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cutenode/fetch-activity.git"
+    "url": "git+https://github.com/cutenode/encites.git"
   },
   "bugs": {
-    "url": "https://github.com/cutenode/fetch-activity/issues"
+    "url": "https://github.com/cutenode/encites/issues"
   },
-  "homepage": "https://github.com/cutenode/fetch-activity#readme"
+  "homepage": "https://github.com/cutenode/encites#readme"
 }
