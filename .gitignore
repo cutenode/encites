@@ -117,8 +117,10 @@ dist
 
 # local
 
-local.js
-/data
+./raw
+./data
+./reports
+report.md
 team.js
-team.md
-/team
+log.js
+log.txt
