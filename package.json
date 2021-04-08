@@ -4,7 +4,8 @@
   "description": "fetches GitHub activity, providing an API for that activity and rendering it prettily in Markdown",
   "main": "index.js",
   "scripts": {
-    "lint": "standard"
+    "lint": "standard",
+    "clean": "rm -rf ./data && rm -rf ./reports && rm -rf ./raw && rm team.md"
   },
   "keywords": [
     "github",
