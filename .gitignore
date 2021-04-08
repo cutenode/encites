@@ -120,6 +120,6 @@ dist
 raw/
 data/
 reports/
-report.md
-team.js
+report.*
+team.*
 log.*
