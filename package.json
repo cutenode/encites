@@ -21,6 +21,7 @@
   "dependencies": {
     "@octokit/rest": "^18.3.2",
     "dotenv": "^8.2.0",
+    "fs-extra": "^9.1.0",
     "luxon": "^1.26.0",
     "pino": "^6.11.2"
   },
