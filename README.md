@@ -45,7 +45,7 @@ A utility in the pursuit of building megafiles. It will retrun a deduped array o
 ```js
 const { dedupeLocalEventsFilesInDirectory } = require('encites')
 
-const directory = './data/`
+const directory = './data/'
 
 // get all data, deduped, from your data directory
 const dedupedData = await dedupeLocalEventsFilesInDirectory(`${directory}`)
@@ -123,7 +123,7 @@ Takes an Events Array, spits out pretty markdown.
 * `title` (string, required): A string to be used as the title of your Markdown document.
 
 ```js
-const { filterPublicGitHubEvents, getMarkdownFromEvents getPublicGitHubEvents } = require('encites')
+const { filterPublicGitHubEvents, getMarkdownFromEvents, getPublicGitHubEvents } = require('encites')
 
 // the users we're getting data for
 const users = ['bnb']
