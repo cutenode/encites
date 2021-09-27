@@ -13,7 +13,7 @@ async function teamData () {
   // fetches public data from  the GitHub API
   const data = await filterPublicGitHubEvents(rawData)
 
-  // save our publicData for future use
+  // // save our publicData for future use
   await writeEventsFile(`${paths.raw}`, rawData)
 
   // attempt to save our data as a Megafile?
