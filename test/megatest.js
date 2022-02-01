@@ -4,10 +4,10 @@ const dates = require('./util/dates')
 const createPaths = require('./util/paths')
 const createHeadings = require('./util/headings')
 
-async function teamData () {
-  const paths = createPaths(dates)
-  const headings = createHeadings(dates)
+const paths = createPaths(dates)
+const headings = createHeadings(dates)
 
+async function teamData () {
   // fetch data from GitHub
   const rawData = await getPublicGitHubEvents(users)
   // fetches public data from  the GitHub API
