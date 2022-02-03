@@ -1,6 +1,6 @@
 {
   "name": "encites",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "fetches GitHub activity, providing an API for that activity and rendering it prettily in Markdown",
   "main": "index.js",
   "scripts": {
