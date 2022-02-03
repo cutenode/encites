@@ -1,0 +1,21 @@
+{
+  "events": [
+    "CommitCommentEvent",
+    "CreateEvent",
+    "DeleteEvent",
+    "ForkEvent",
+    "GollumEvent",
+    "IssueCommentEvent",
+    "IssuesEvent",
+    "IssuesEvent",
+    "MemberEvent",
+    "PublicEvent",
+    "PullRequestEvent",
+    "PullRequestReviewEvent",
+    "PullRequestReviewCommentEvent",
+    "PushEvent",
+    "ReleaseEvent",
+    "SponsorshipEvent",
+    "WatchEvent"
+  ]
+}
