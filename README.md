@@ -45,7 +45,7 @@ A utility in the pursuit of building megafiles. It will retrun a deduped array o
 ```js
 const { dedupeLocalEventsFilesInDirectory } = require('encites')
 
-const directory = './data/`
+const directory = './data/'
 
 // get all data, deduped, from your data directory
 const dedupedData = await dedupeLocalEventsFilesInDirectory(`${directory}`)
